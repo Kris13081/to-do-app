@@ -15,9 +15,24 @@ test('user can delete a task', async ({ page }) => {
     await page.goto('http://localhost:5500/');
     await page.fill('#task-input', 'Test Task');
     await page.click('#add-task');
+    
     //Delete task
     await page.click('.task .delete-task');
+
     const tasks = await page.$$eval('.task',
     tasks => tasks.map(task => task.textContent));
     expect(tasks).not.toContain('Test Task');
+});
+
+test('user can complete a task', async ({ page }) => {
+    //Add task
+    await page.goto('http://localhost:5500/');
+    await page.fill('#task-input', 'Test Task');
+    await page.click('#add-task');
+    
+    //Completes the task
+    await page.click('.task .task-complete');
+
+    const completedTask = await page.$('.task.completed');
+    expect(completedTask).not.toBeNull();
 });
